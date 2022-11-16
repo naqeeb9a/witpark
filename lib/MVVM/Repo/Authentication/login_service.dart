@@ -5,14 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
 import '../../Models/Authentication/login_model.dart';
 
-class LoginPageService {
-  static Future<Object> LoginPage(username, password) async {
+class LoginService {
+  static Future<Object> loginUser(String username, String password) async {
     try {
       var url = Uri.parse("http://witpark.pythonanywhere.com/API/Login_API/");
-      var response = await http.post(url, body: {
-        'username': username,
-        'password': password
-      }).timeout(const Duration(seconds: 4));
+      var response = await http
+          .post(url, body: {'username': username, 'password': password});
       if (response.statusCode == 200) {
         return Success(response.statusCode, loginModelFromJson(response.body));
       }

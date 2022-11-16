@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_transitions/flutter_transitions.dart';
 import 'package:provider/provider.dart';
-import 'package:witpark/MVVM/ViewModel/Authentication/login_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Authentication/login_view_model.dart';
 import 'package:witpark/MVVM/Views/Authentication/forgot_password.dart';
 import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
@@ -17,8 +17,6 @@ import 'package:witpark/MVVM/Views/Home%20Page/home_page.dart';
 import 'package:witpark/MVVM/Views/Authentication/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:witpark/MVVM/Views/Skip%20Screen/skip.dart';
-
-import '../../Repo/Authentication/signup_service.dart';
 
 String? usernameLogin;
 
@@ -145,14 +143,14 @@ class _LoginPageState extends State<LoginPage> {
                         text: "Sign In",
                         function: () async {
                           await loginModelView
-                              .loginUser(username, password)
-                              .then((response) {
-                            if (response is Success) {
-                              KRoutes.push(context, const HomePage());
-                            }
-                            if (response is Failure) {
+                              .loginUser(username.text, password.text)
+                              .then((value) {
+                            if (loginModelView.modelError != null) {
                               Fluttertoast.showToast(
-                                  msg: response.errorResponse.toString());
+                                  msg: "Username or password incorrect !!");
+                            }
+                            if (loginModelView.loginModel != null) {
+                              KRoutes.push(context, const HomePage());
                             }
                           });
                         }),
