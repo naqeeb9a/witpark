@@ -39,7 +39,6 @@ dependencies:
   auto_size_text: ^3.0.0
   flutter_styled_toast: ^2.1.3
   flutter_transitions: ^1.0.2
-  date_picker_timeline: ^1.2.3
   http: ^0.13.5
   shared_preferences: ^2.0.15
   mailer: ^5.2.0
@@ -51,6 +50,7 @@ dependencies:
   webview_flutter: ^3.0.4
   provider: ^6.0.4
   fluttertoast: ^8.1.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

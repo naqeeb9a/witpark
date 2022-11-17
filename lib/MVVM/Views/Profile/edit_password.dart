@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:witpark/MVVM/Views/Authentication/login_page.dart';
 import 'package:witpark/MVVM/Views/Profile/edit_profile.dart';
 import 'package:http/http.dart' as http;
-import '../Bookings/booking_card.dart';
 
 class Editpassword extends StatefulWidget {
   const Editpassword({super.key});
@@ -86,7 +84,11 @@ class _EditpasswordState extends State<Editpassword> {
   // }
 
   TextEditingController control = TextEditingController();
-  var data = {"username": usernameLogin, "oldpassword": "", "newpassword": ""};
+  var data = {
+    "username": "usernameLogin",
+    "oldpassword": "",
+    "newpassword": ""
+  };
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,9 +106,9 @@ class _EditpasswordState extends State<Editpassword> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            Center(
+            const Center(
               child: CircleAvatar(
-                backgroundImage: AssetImage(image),
+                backgroundImage: AssetImage("assets/wit2.png"),
                 maxRadius: 60,
               ),
             ),
@@ -129,7 +131,7 @@ class _EditpasswordState extends State<Editpassword> {
                         return null;
                       },
                       onSaved: (value) {
-                        data["oldpassword"] = value;
+                        data["oldpassword"] = value!;
                       },
                     ),
                     TextFormField(
@@ -143,7 +145,7 @@ class _EditpasswordState extends State<Editpassword> {
                         return null;
                       },
                       onSaved: (value) {
-                        data["newpassword"] = value;
+                        data["newpassword"] = value!;
                       },
                     ),
                     TextFormField(

@@ -1,12 +1,11 @@
-import 'dart:convert';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_transitions/flutter_transitions.dart';
 import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/ViewModels/Authentication/login_view_model.dart';
 import 'package:witpark/MVVM/Views/Authentication/forgot_password.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
 import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_app_bar.dart';
@@ -15,10 +14,7 @@ import 'package:witpark/Widgets/custom_text.dart';
 import 'package:witpark/Widgets/custom_text_field.dart';
 import 'package:witpark/MVVM/Views/Home%20Page/home_page.dart';
 import 'package:witpark/MVVM/Views/Authentication/sign_up.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:witpark/MVVM/Views/Skip%20Screen/skip.dart';
-
-String? usernameLogin;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,37 +28,6 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  signIn() async {
-    Map data = {
-      "username": _authData["username"],
-      "password": _authData["password"]
-    };
-    var response = await http.post(
-        Uri.parse('http://witpark.pythonanywhere.com/API/Login_API/'),
-        body: data);
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    var jsonData = jsonDecode(response.body);
-    if (response.statusCode == 200 &&
-        jsonData["message"] == "${_authData["username"]} Login successfully") {
-      usernameLogin = _authData["username"];
-      setState(() {
-        pref.setString("token", usernameLogin!);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => const HomePage()),
-            (Route<dynamic> route) => false);
-      });
-    } else {
-      showToast("username or password incorrect or does not exists",
-          context: context);
-    }
-  }
-
-  final _authData = {
-    "username": "",
-    "password": "",
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -117,15 +82,20 @@ class _LoginPageState extends State<LoginPage> {
                 isPass: true,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Checkbox(
-                      value: _checkBoxVal,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _checkBoxVal = value!;
-                        });
-                      }),
-                  const CustomText(text: "Remember me"),
+                  Row(
+                    children: [
+                      Checkbox(
+                          value: _checkBoxVal,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _checkBoxVal = value!;
+                            });
+                          }),
+                      const CustomText(text: "Remember me"),
+                    ],
+                  ),
                   InkWell(
                     onTap: () {
                       KRoutes.push(context, const ForgotPassword());
@@ -142,15 +112,18 @@ class _LoginPageState extends State<LoginPage> {
                         buttonColor: primaryColor,
                         text: "Sign In",
                         function: () async {
-                          await loginModelView
+                          loginModelView.setModelError(null);
+                          await context
+                              .read<LoginModelView>()
                               .loginUser(username.text, password.text)
-                              .then((value) {
+                              .then((value) async {
                             if (loginModelView.modelError != null) {
                               Fluttertoast.showToast(
-                                  msg: "Username or password incorrect !!");
-                            }
-                            if (loginModelView.loginModel != null) {
-                              KRoutes.push(context, const HomePage());
+                                  msg: loginModelView.modelError!.errorResponse
+                                      .toString());
+                            } else {
+                              await updateData(loginModelView.loginModel!);
+                              pushPage();
                             }
                           });
                         }),
@@ -182,5 +155,17 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> updateData(LoginModel response) async {
+    await context.read<UserDataProvider>().saveUserData(response);
+  }
+
+  popPage() {
+    KRoutes.pop(context);
+  }
+
+  pushPage() {
+    KRoutes.pushAndRemoveUntil(context, const HomePage());
   }
 }

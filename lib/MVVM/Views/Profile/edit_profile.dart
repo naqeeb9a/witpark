@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:witpark/MVVM/Views/Bookings/booking_card.dart';
 import 'package:http/http.dart' as http;
 
 class EditProfile extends StatefulWidget {
@@ -67,9 +66,9 @@ class _EditProfileState extends State<EditProfile> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            Center(
+            const Center(
               child: CircleAvatar(
-                backgroundImage: AssetImage(image),
+                backgroundImage: AssetImage("assets/wit2.png"),
                 maxRadius: 60,
               ),
             ),

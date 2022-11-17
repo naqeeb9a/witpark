@@ -1,35 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:witpark/Utils/app_routes.dart';
-import 'package:witpark/Utils/utils.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/Views/Authentication/login_page.dart';
 import 'package:witpark/MVVM/Views/Home%20Page/home_page.dart';
 
-import '../Authentication/login_page.dart';
+import '../../../Provider/user_data_provider.dart';
+import '../../../Utils/app_routes.dart';
 
-class PageDecider extends StatelessWidget {
+class PageDecider extends StatefulWidget {
   const PageDecider({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    checkLoginStatus(context);
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(
-          color: primaryColor,
-          strokeWidth: 2,
-        ),
-      ),
-    );
+  State<PageDecider> createState() => _PageDeciderState();
+}
+
+class _PageDeciderState extends State<PageDecider> {
+  @override
+  void initState() {
+    decidePage();
+    super.initState();
   }
 
-  checkLoginStatus(BuildContext context) async {
-    await SharedPreferences.getInstance().then((value) {
-      usernameLogin = value.getString("token");
-      if (value.getString("token") == null) {
-        KRoutes.pushAndRemoveUntil(context, const LoginPage());
-      } else {
-        KRoutes.pushAndRemoveUntil(context, const HomePage());
-      }
-    });
+  decidePage() async {
+    String? userData = await context.read<UserDataProvider>().getUserData();
+    if (userData == null) {
+      pushPage(const LoginPage(), userData);
+    } else {
+      pushPage(const HomePage(), userData);
+    }
+  }
+
+  void pushPage(Widget page, String? userData) {
+    if (userData != null) {
+      context.read<UserDataProvider>().updateData(loginModelFromJson(userData));
+    }
+    KRoutes.pushAndRemoveUntil(context, page);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+    );
   }
 }

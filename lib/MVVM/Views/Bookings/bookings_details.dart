@@ -1,31 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
 
-// ignore: must_be_immutable
 class BookingDetails extends StatefulWidget {
-  String? bdowner;
-  String? bdcity;
-  String? bdplace;
-  String? bdarrival;
-  String? bddeparture;
-  String? bdvehicle;
-  String? bdamount;
-  String? bdpaymentstatus;
-  BookingDetails(
-      {super.key,
-      this.bdowner,
-      this.bdcity,
-      this.bdplace,
-      this.bdarrival,
-      this.bddeparture,
-      this.bdvehicle,
-      this.bdamount,
-      this.bdpaymentstatus});
+  final Datum booking;
+  const BookingDetails({super.key, required this.booking});
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
 }
 
 class _BookingDetailsState extends State<BookingDetails> {
+  final dateFormat = DateFormat('yyyy-MM-dd');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +68,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                     ),
                     AutoSizeText(
-                      " ${widget.bdowner}  \n ${widget.bdcity} \n ${widget.bdplace} \n ${widget.bdarrival} \n ${widget.bddeparture} \n ${widget.bdvehicle} \n ${widget.bdamount} \n ${widget.bdpaymentstatus} ",
+                      " ${widget.booking.bookingOwner}  \n ${widget.booking.bookingCity} \n ${widget.booking.bookingPlace} \n ${dateFormat.format(widget.booking.bookingArrival as DateTime)} \n ${dateFormat.format(widget.booking.bookingDeparture as DateTime)} \n ${widget.booking.bookingVehicle} \n ${widget.booking.bookingAmount} \n ${widget.booking.bookingPaymentStatus} ",
                       style: const TextStyle(fontSize: 20),
                       textAlign: TextAlign.left,
                     ),

@@ -61,7 +61,7 @@ class _DeleteUserState extends State<DeleteUser> {
     });
   }
 
-  var data = {"username": usernameLogin, "password": ""};
+  var data = {"username": "usernameLogin", "password": ""};
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,7 @@ class _DeleteUserState extends State<DeleteUser> {
                           return null;
                         },
                         onSaved: (value) {
-                          data["password"] = value;
+                          data["password"] = value!;
                         },
                       ),
                       spacer(context, 0.2),

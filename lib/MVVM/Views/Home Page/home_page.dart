@@ -1,7 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:witpark/MVVM/Views/Bookings/booking.dart';
-import 'package:witpark/home.dart';
+import 'package:witpark/MVVM/Views/Home%20Page/home.dart';
 import 'package:witpark/nearby.dart';
 import 'package:witpark/MVVM/Views/Profile/profile.dart';
 
