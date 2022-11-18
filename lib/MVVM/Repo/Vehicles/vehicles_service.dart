@@ -6,10 +6,10 @@ import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
 
 class VehiclesService {
-  static Future<Object> getAllVehicles() async {
+  static Future<Object> getAllVehicles(String username) async {
     try {
-      var url =
-          Uri.parse("http://witpark.pythonanywhere.com/API/AllVehicles_API/");
+      var url = Uri.parse(
+          "http://witpark.pythonanywhere.com/API/UserVehicles_API/$username");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         return Success(
@@ -46,7 +46,29 @@ class VehiclesService {
     } on FormatException {
       return Failure(102, "Invalid format");
     } catch (e) {
-      print(e);
+      return Failure(103, "Unknown Error");
+    }
+  }
+
+  static Future<Object> editVehicle(Datum vehicle) async {
+    try {
+      var url = Uri.parse(
+          "https://witpark.pythonanywhere.com/API/Update_Vehicle_API/${vehicle.vehicleId}");
+      var response = await http.post(url, body: {
+        "vehicle_name": vehicle.vehicleName,
+        "vehicle_model": vehicle.vehicleModel.toString(),
+        "vehicle_color": vehicle.vehicleColor,
+        "vehicle_no_plate": vehicle.vehicleNoPlate
+      });
+      if (response.statusCode == 201) {
+        return Success(response.statusCode, "Created");
+      }
+      return Failure(response.statusCode, "Invalid Response");
+    } on HttpException {
+      return Failure(101, "No internet");
+    } on FormatException {
+      return Failure(102, "Invalid format");
+    } catch (e) {
       return Failure(103, "Unknown Error");
     }
   }

@@ -3,6 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/ViewModels/Authentication/login_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/BookingViewModel/booking_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Cities/city_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Profile/update_password_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Profile/update_profile_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/edit_vehicle_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/new_vehicle_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
 import 'package:witpark/MVVM/Views/Page%20Decider/page_decider.dart';
@@ -27,6 +31,18 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => NewVehicleModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CityModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UpdateProfileModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => EditVehicleModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UpdatePasswordModelView(),
         ),
       ],
       child: MaterialApp(

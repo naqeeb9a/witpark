@@ -5,3 +5,5 @@ const kblack = Colors.black;
 const kWhite = Colors.white;
 const kGrey = Colors.grey;
 const ktransparent = Colors.transparent;
+String selectedCity = "";
+String selectedVehicle = "";

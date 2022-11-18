@@ -1,53 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/ViewModels/Cities/city_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Profile/update_profile_view_model.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
+import 'package:witpark/Utils/utils.dart';
+import 'package:witpark/Widgets/cities_list.dart';
+import 'package:witpark/Widgets/custom_button.dart';
+import 'package:witpark/Widgets/custom_text.dart';
+import 'package:witpark/Widgets/custom_text_field.dart';
 
 class EditProfile extends StatefulWidget {
-  final String pid;
-  const EditProfile(this.pid, {super.key});
+  const EditProfile({super.key});
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  // ignore: non_constant_identifier_names
-
-  updateUser() async {
-    await http
-        .put(
-            Uri.parse(
-                "https://witpark.pythonanywhere.com/API/Update_User_API/${widget.pid}"),
-            body: data)
-        .then((value) {
-      if (value.statusCode == 200) {
-        showToast("Successfully updated", context: context);
-        Navigator.pop(context);
-      } else {
-        showToast("Not updated some error occured", context: context);
-      }
-    });
+  final TextEditingController _firstName = TextEditingController();
+  final TextEditingController _lastName = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _city = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
+  @override
+  void initState() {
+    LoginModel userData = context.read<UserDataProvider>().userData!;
+    _firstName.text = userData.data!.firstName!;
+    _lastName.text = userData.data!.lastName!;
+    _email.text = userData.data!.email!;
+    _city.text = userData.data!.city!;
+    _phone.text = userData.data!.phone!;
+    super.initState();
   }
-
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
-  Future _submit() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    _formKey.currentState!.save();
-    updateUser();
-  }
-
-  var data = {
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "city": "",
-    "phone": ""
-  };
 
   @override
   Widget build(BuildContext context) {
+    LoginModel userData = context.read<UserDataProvider>().userData!;
+    UpdateProfileModelView updateProfileModelView =
+        context.watch<UpdateProfileModelView>();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -61,134 +54,92 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            const Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/wit2.png"),
-                maxRadius: 60,
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          labelText: "firstname",
-                          hintText: "Enter first name",
-                          counterText: ""),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "This field cannot be empty";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["first_name"] = value!;
-                      },
-                    ),
-                    spacer(context, 0.01),
-                    TextFormField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          labelText: "last name",
-                          hintText: "Enter last name",
-                          counterText: ''),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "This field cannot be empty";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["last_name"] = value!;
-                      },
-                    ),
-                    spacer(context, 0.01),
-                    TextFormField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          labelText: "email",
-                          hintText: "Enter your email address",
-                          counterText: ''),
-                      validator: (value) {
-                        if (value!.isEmpty || !value.contains("@")) {
-                          return "check your email again";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["email"] = value!;
-                      },
-                    ),
-                    spacer(context, 0.01),
-                    TextFormField(
-                      maxLength: 11,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          labelText: "city",
-                          hintText: "enter the city u live in",
-                          counterText: ""),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "This field cannot be empty";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["city"] = value!;
-                      },
-                    ),
-                    spacer(context, 0.01),
-                    TextFormField(
-                      maxLength: 11,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          labelText: "phone no",
-                          hintText: "enter the phone number",
-                          counterText: ""),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "This field cannot be empty";
-                        } else if (value.length < 11) {
-                          return "Phone number should have 11 digits check again";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["phone"] = value!;
-                      },
-                    ),
-                  ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage("assets/wit2.png"),
+                  maxRadius: 60,
                 ),
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _submit();
-              },
-              child: const Text(
-                "Update",
-                style: TextStyle(color: Colors.black),
+              const SizedBox(height: 20),
+              const CustomText(text: "First name :"),
+              const SizedBox(height: 10),
+              FormTextField(
+                  controller: _firstName, suffixIcon: const Icon(Icons.person)),
+              const SizedBox(height: 10),
+              const CustomText(text: "Last name :"),
+              const SizedBox(height: 10),
+              FormTextField(
+                  controller: _lastName, suffixIcon: const Icon(Icons.person)),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const CustomText(text: "City :"),
+                  Builder(
+                    builder: (context) {
+                      CityModelView cityModelView =
+                          context.watch<CityModelView>();
+                      if (cityModelView.loading) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (cityModelView.modelError != null) {
+                        return const CustomText(text: "Error");
+                      }
+                      return ListDropDown(
+                          givenList:
+                              cityModelView.allcitysModel!.data!.toList());
+                    },
+                  )
+                ],
               ),
-            )
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: updateProfileModelView.loading
+                    ? const CircularProgressIndicator()
+                    : CustomButton(
+                        buttonColor: primaryColor,
+                        text: "Update",
+                        function: () async {
+                          LoginModel updatedUserData = LoginModel(
+                              status: true,
+                              message: "updated",
+                              data: Data(
+                                  id: userData.data!.id,
+                                  username: userData.data!.username,
+                                  firstName: _firstName.text,
+                                  lastName: _lastName.text,
+                                  email: userData.data!.email,
+                                  phone: userData.data!.phone,
+                                  city: selectedCity));
+                          updateProfileModelView.setModelError(null);
+                          await updateProfileModelView
+                              .getAllupdateProfiles(updatedUserData)
+                              .then((value) {
+                            if (updateProfileModelView.modelError != null) {
+                              Fluttertoast.showToast(
+                                  msg: "Profile update error");
+                            } else {
+                              context
+                                  .read<UserDataProvider>()
+                                  .updateData(updatedUserData);
+                              KRoutes.pop(context);
+                              Fluttertoast.showToast(
+                                  msg: "Updated Successfully");
+                            }
+                          });
+                        }),
+              )
+            ],
+          ),
         ),
       ),
     );

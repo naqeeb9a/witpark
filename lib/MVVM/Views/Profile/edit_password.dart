@@ -1,10 +1,14 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:witpark/MVVM/Views/Profile/edit_profile.dart';
-import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/ViewModels/Profile/update_password_view_model.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
+import 'package:witpark/Utils/utils.dart';
+import 'package:witpark/Widgets/custom_button.dart';
+import 'package:witpark/Widgets/custom_text.dart';
+import 'package:witpark/Widgets/custom_text_field.dart';
 
 class Editpassword extends StatefulWidget {
   const Editpassword({super.key});
@@ -14,83 +18,14 @@ class Editpassword extends StatefulWidget {
 }
 
 class _EditpasswordState extends State<Editpassword> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
-  _submit() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    _formKey.currentState!.save();
-    updatePassword();
-    // Navigator.pop(context);
-  }
-
-  updatePassword() async {
-    await http
-        .post(
-            Uri.parse(
-                "https://witpark.pythonanywhere.com/API/Update_Password_API/"),
-            body: data)
-        .then((value) {
-      var jsondata = jsonDecode(value.body);
-      if (kDebugMode) {
-        print(jsondata);
-      }
-      if (jsondata["message"] == "Invalid data") {
-        showToast("wrong old password", context: context);
-      } else if (jsondata["status"] == 202) {
-        showToast("Successfully updated", context: context);
-        Navigator.pop(context);
-      } else {
-        showToast("something went wrong", context: context);
-      }
-    });
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getSWData();
-  // }
-
-  // var data1;
-  // var data2 = {
-  //   "first_name": "",
-  //   "last_name": "",
-  //   "email": "",
-  //   "password": "",
-  //   "phone": "",
-  //   "city": ""
-  // };
-  // Future<String> getSWData() async {
-  //   var res = await http.get(
-  //       Uri.parse("http://witpark.pythonanywhere.com/API/AllUser_API/"),
-  //       headers: {"Accept": "application/json"});
-  //   var resBody = json.decode(res.body);
-  //   setState(() {
-  //     data1 = resBody["data"];
-  //   });
-  //   for (var u in data1) {
-  //     if (u["username"] == usernameLogin) {
-  //       data2["first_name"] = u["first_name"];
-  //       data2["last_name"] = u["last_name"];
-  //       data2["email"] = u["email"];
-  //       data2["password"] = u["password"];
-  //       data2["phone"] = u["phone"];
-  //       data2["city"] = u["city"];
-  //     }
-  //   }
-  //   print(data2);
-  //   return null;
-  // }
-
-  TextEditingController control = TextEditingController();
-  var data = {
-    "username": "usernameLogin",
-    "oldpassword": "",
-    "newpassword": ""
-  };
+  final TextEditingController _oldPassword = TextEditingController();
+  final TextEditingController _newPassword = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    UpdatePasswordModelView updatePasswordModelView =
+        context.watch<UpdatePasswordModelView>();
+    LoginModel userData = context.read<UserDataProvider>().userData!;
     return Scaffold(
         appBar: AppBar(
           leading: InkWell(
@@ -102,79 +37,94 @@ class _EditpasswordState extends State<Editpassword> {
           elevation: 0,
         ),
         body: SingleChildScrollView(
-          child: Column(children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            const Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/wit2.png"),
-                maxRadius: 60,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Enter old password"),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Password cannot be empty";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["oldpassword"] = value!;
-                      },
-                    ),
-                    TextFormField(
-                      controller: control,
-                      decoration: const InputDecoration(
-                          labelText: "Enter new password"),
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 6) {
-                          return "Password is too short";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        data["newpassword"] = value!;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Confirm new password"),
-                      validator: (value) {
-                        if (value != control.text || value!.isEmpty) {
-                          return "Passwords don't match";
-                        }
-                        return null;
-                      },
-                    ),
-                    spacer(context, 0.02),
-                    ElevatedButton(
-                      onPressed: () {
-                        _submit();
-                        showToast("Please wait..",
-                            context: context, duration: Duration.zero);
-                      },
-                      child: const Text(
-                        "Update",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    )
-                  ],
+              const Align(
+                alignment: Alignment.center,
+                child: CircleAvatar(
+                  backgroundImage: AssetImage("assets/wit2.png"),
+                  maxRadius: 60,
                 ),
               ),
-            )
-          ]),
+              const SizedBox(
+                height: 20,
+              ),
+              const CustomText(text: "Old Password :"),
+              const SizedBox(
+                height: 10,
+              ),
+              FormTextField(
+                controller: _oldPassword,
+                suffixIcon: const Icon(Icons.visibility),
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const CustomText(text: "New Password :"),
+              const SizedBox(
+                height: 10,
+              ),
+              FormTextField(
+                controller: _newPassword,
+                suffixIcon: const Icon(Icons.visibility),
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const CustomText(text: "Confirm Password :"),
+              const SizedBox(
+                height: 10,
+              ),
+              FormTextField(
+                controller: _confirmPassword,
+                suffixIcon: const Icon(Icons.visibility),
+                isPass: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: updatePasswordModelView.loading
+                    ? const CircularProgressIndicator()
+                    : CustomButton(
+                        buttonColor: primaryColor,
+                        text: "Update",
+                        function: () async {
+                          updatePasswordModelView.setModelError(null);
+                          await updatePasswordModelView
+                              .updatePasword(userData, _oldPassword.text,
+                                  _newPassword.text)
+                              .then((value) {
+                            if (updatePasswordModelView.modelError != null) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Make sure the old password is correct !");
+                            } else {
+                              KRoutes.pop(context);
+                              Fluttertoast.showToast(
+                                  msg: "Updated Password Successfully !!");
+                            }
+                          });
+                        }),
+              )
+            ]),
+          ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _oldPassword.dispose();
+    _newPassword.dispose();
+    _confirmPassword.dispose();
+    super.dispose();
   }
 }

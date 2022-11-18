@@ -13,10 +13,6 @@ class BookingModelView extends ChangeNotifier {
   AllBookingsModel? get allBookingsModel => _allBookingsModel;
   ModelError? get modelError => _modelError;
 
-  BookingModelView() {
-    getAllBookings();
-  }
-
   setLoading(bool loading) {
     _loading = loading;
     notifyListeners();
@@ -30,9 +26,9 @@ class BookingModelView extends ChangeNotifier {
     _modelError = modelError;
   }
 
-  Future getAllBookings() async {
+  Future getAllBookings(String username) async {
     setLoading(true);
-    var response = await BookingService.getAllBookings();
+    var response = await BookingService.getAllBookings(username);
     if (response is Success) {
       setBookingModel(response.response as AllBookingsModel);
     }

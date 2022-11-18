@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
+import 'package:witpark/MVVM/Models/Cities/city_model.dart';
 import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
 
-class BookingService {
-  static Future<Object> getAllBookings(String username) async {
+class CitiesService {
+  static Future<Object> getAllCities() async {
     try {
-      var url = Uri.parse(
-          "http://witpark.pythonanywhere.com/API/UserBookings_API/$username");
-      var response = await http.get(url);
+      var url =
+          Uri.parse("http://witpark.pythonanywhere.com/API/AllCities_API/");
+      var response = await http.get(
+        url,
+      );
       if (response.statusCode == 200) {
-        return Success(
-            response.statusCode, allBookingsModelFromJson(response.body));
+        return Success(response.statusCode, cityModelFromJson(response.body));
       }
       return Failure(response.statusCode, "Invalid Response");
     } on HttpException {

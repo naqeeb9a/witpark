@@ -34,7 +34,7 @@ class CustomButton extends StatelessWidget {
             border: invert == true
                 ? Border.all(color: primaryColor, width: 1)
                 : null,
-            color: invert == true ? null : buttonColor),
+            color: invert == true ? kWhite : buttonColor),
         child: CustomText(
           text: text,
           color: textColor,

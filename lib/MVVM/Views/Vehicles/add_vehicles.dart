@@ -123,7 +123,9 @@ class _AddVehiclesState extends State<AddVehicles> {
                                     .modelError!.errorResponse
                                     .toString());
                           } else {
-                            context.read<VehicleModelView>().getAllVehicles();
+                            context
+                                .read<VehicleModelView>()
+                                .getAllVehicles(userData.data!.username!);
                             KRoutes.pop(context);
                             Fluttertoast.showToast(
                                 msg: "Vehicle added successfully !!");

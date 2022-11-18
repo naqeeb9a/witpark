@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
 import 'package:witpark/MVVM/Views/Vehicles/add_vehicles.dart';
-import 'package:witpark/MVVM/Views/Vehicles/edit_vehicle.dart';
 import 'package:witpark/MVVM/Views/Vehicles/vehicles_cards.dart';
 import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Widgets/custom_text.dart';
@@ -84,11 +83,8 @@ class _VehiclesState extends State<Vehicles> {
       itemBuilder: (context, index) {
         Datum vehicle;
         vehicle = vehicleModelView.vehiclesModel!.data![index];
-        return InkWell(
-          onTap: ()=>KRoutes.push(context, EditVehicle(vehicle.vehicleId)),
-          child: VechiclesCards(
-            vehicle: vehicle,
-          ),
+        return VechiclesCards(
+          vehicle: vehicle,
         );
       },
     );

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_transitions/flutter_transitions.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/Views/Page%20Decider/page_decider.dart';
 import 'package:witpark/MVVM/Views/Profile/delete_user.dart';
+import 'package:witpark/MVVM/Views/Profile/edit_password.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_button.dart';
 import 'package:witpark/Widgets/custom_text.dart';
-import 'package:witpark/faq.dart';
+import 'package:witpark/MVVM/Views/Profile/faq.dart';
 import 'package:witpark/MVVM/Views/Profile/edit_profile.dart';
 import 'package:witpark/MVVM/Views/Vehicles/vehicles.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../Authentication/login_page.dart';
+
+import '../../ViewModels/Vehicles/vehicle_view_model.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -20,191 +26,163 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    LoginModel userData = context.watch<UserDataProvider>().userData!;
     return Scaffold(
       backgroundColor: primaryColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(height: 10),
-              const CustomText(text: "Profile"),
-              const SizedBox(height: 10),
-              const CircleAvatar(
-                radius: 62,
-                backgroundColor: Colors.black,
-                child: CircleAvatar(
-                  maxRadius: 60,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage("assets/wit2.png"),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const SizedBox(height: 10),
+                const CustomText(
+                  text: "Profile",
+                  fontsize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        width: 2,
-                        color: Colors.black,
-                      )),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        spacer(context, 0.023),
-                        const Divider(
-                          thickness: 2,
+                const SizedBox(height: 10),
+                const CircleAvatar(
+                  radius: 62,
+                  backgroundColor: Colors.black,
+                  child: CircleAvatar(
+                    maxRadius: 60,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage("assets/wit2.png"),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          width: 2,
                           color: Colors.black,
-                        ),
-                        spacer(context, 0.015),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CustomButton(
-                                buttonColor: primaryColor,
-                                text: "Edit profile",
-                                function: () {}),
-                            CustomButton(
-                                buttonColor: primaryColor,
-                                text: "Edit password",
-                                function: () {})
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.04,
-              ),
-              InkWell(
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 2,
-                        color: Colors.black,
-                      )),
-                  width: MediaQuery.of(context).size.width * 0.67,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: const Center(
-                      child: Text(
-                    "Vehicles",
-                    style: TextStyle(fontSize: 20),
-                  )),
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context, FlutterScaleRoute(page: const Vehicles()));
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, FlutterScaleRoute(page: const FAQ()));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 2,
-                        color: Colors.black,
-                      )),
-                  width: MediaQuery.of(context).size.width * 0.67,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: const Center(
-                      child: Text(
-                    "FAQ",
-                    style: TextStyle(fontSize: 20),
-                  )),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context, FlutterScaleRoute(page: web(context)));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 2,
-                        color: Colors.black,
-                      )),
-                  width: MediaQuery.of(context).size.width * 0.67,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  child: const Center(
-                      child: Text(
-                    "About",
-                    style: TextStyle(fontSize: 20),
-                  )),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const LoginPage()),
-                          (Route<dynamic> route) => false);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                          border: Border.all(
-                            width: 2,
+                        )),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  CustomText(text: "Email :"),
+                                  CustomText(text: "Name :"),
+                                  CustomText(text: "phone :"),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(text: "${userData.data!.email}"),
+                                  CustomText(
+                                      text: "${userData.data!.firstName}"),
+                                  CustomText(text: "${userData.data!.phone}"),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Divider(
+                            thickness: 2,
                             color: Colors.black,
-                          )),
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      child: const Center(
-                          child: Text(
-                        "Logout",
-                        style: TextStyle(fontSize: 20),
-                      )),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context, FlutterScaleRoute(page: const DeleteUser()));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.black,
-                          )),
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      child: const Center(
-                          child: Text(
-                        "Delete user",
-                        style: TextStyle(fontSize: 20),
-                      )),
-                    ),
-                  ),
-                ],
-              )
-            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          spacer(context, 0.015),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              CustomButton(
+                                  buttonColor: primaryColor,
+                                  text: "Edit profile",
+                                  function: () {
+                                    KRoutes.push(context, const EditProfile());
+                                  }),
+                              CustomButton(
+                                  buttonColor: primaryColor,
+                                  text: "Edit password",
+                                  function: () {
+                                    KRoutes.push(context, const Editpassword());
+                                  })
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    )),
+                const SizedBox(height: 20),
+                CustomButton(
+                    buttonColor: primaryColor,
+                    text: "Vehicles",
+                    invert: true,
+                    function: () {
+                      context
+                          .read<VehicleModelView>()
+                          .getAllVehicles(userData.data!.username!);
+                      KRoutes.push(context, const Vehicles());
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomButton(
+                    buttonColor: primaryColor,
+                    text: "FAQ",
+                    invert: true,
+                    function: () {
+                      KRoutes.push(context, const FAQ());
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomButton(
+                    buttonColor: primaryColor,
+                    text: "About",
+                    invert: true,
+                    function: () {
+                      KRoutes.push(context, web(context));
+                    }),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomButton(
+                        buttonColor: primaryColor,
+                        text: "Logout",
+                        invert: true,
+                        function: () {
+                          context.read<UserDataProvider>().clearUserData();
+                          KRoutes.push(context, const PageDecider());
+                        }),
+                    CustomButton(
+                        buttonColor: primaryColor,
+                        text: "Delete User",
+                        invert: true,
+                        function: () {
+                          KRoutes.push(context, const DeleteUser());
+                        })
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

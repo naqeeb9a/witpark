@@ -1,5 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/edit_vehicle_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
 
 import '../../../Utils/utils.dart';
 import '../../../Widgets/custom_button.dart';
@@ -7,8 +15,8 @@ import '../../../Widgets/custom_text.dart';
 import '../../../Widgets/custom_text_field.dart';
 
 class EditVehicle extends StatefulWidget {
-  final int? vehicleId;
-  const EditVehicle(this.vehicleId, {super.key});
+  final Datum? vehicle;
+  const EditVehicle(this.vehicle, {super.key});
   @override
   State<EditVehicle> createState() => _EditVehicleState();
 }
@@ -19,7 +27,19 @@ class _EditVehicleState extends State<EditVehicle> {
   final TextEditingController _carColor = TextEditingController();
   final TextEditingController _carNumberPlate = TextEditingController();
   @override
+  void initState() {
+    _carName.text = widget.vehicle!.vehicleName!;
+    _carModel.text = widget.vehicle!.vehicleModel.toString();
+    _carColor.text = widget.vehicle!.vehicleColor!;
+    _carNumberPlate.text = widget.vehicle!.vehicleNoPlate!;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    EditVehicleModelView editVehicleModelView =
+        context.watch<EditVehicleModelView>();
+    LoginModel userData = context.read<UserDataProvider>().userData!;
     return Scaffold(
         appBar: AppBar(
           title: const AutoSizeText(
@@ -104,8 +124,35 @@ class _EditVehicleState extends State<EditVehicle> {
               const SizedBox(
                 height: 50,
               ),
-              CustomButton(
-                  buttonColor: primaryColor, text: "Update", function: () {})
+              editVehicleModelView.loading
+                  ? const CircularProgressIndicator()
+                  : CustomButton(
+                      buttonColor: primaryColor,
+                      text: "Update",
+                      function: () async {
+                        Datum vehicle = Datum(
+                            vehicleId: widget.vehicle!.vehicleId,
+                            vehicleOwner: widget.vehicle!.vehicleOwner,
+                            vehicleName: widget.vehicle!.vehicleName,
+                            vehicleModel: widget.vehicle!.vehicleModel,
+                            vehicleColor: widget.vehicle!.vehicleColor,
+                            vehicleNoPlate: widget.vehicle!.vehicleNoPlate);
+                        editVehicleModelView.setModelError(null);
+                        await editVehicleModelView
+                            .editVehicle(vehicle)
+                            .then((value) {
+                          if (editVehicleModelView.modelError != null) {
+                            Fluttertoast.showToast(msg: "Edit vehicle error");
+                          } else {
+                            context
+                                .read<VehicleModelView>()
+                                .getAllVehicles(userData.data!.username!);
+                            KRoutes.pop(context);
+                            Fluttertoast.showToast(
+                                msg: "Vehicle Edited Succesfully");
+                          }
+                        });
+                      })
             ]),
           ),
         ));
