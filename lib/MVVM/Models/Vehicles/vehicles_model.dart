@@ -14,14 +14,14 @@ class VehiclesModel {
 
   final bool? status;
   final String? message;
-  final List<Datum>? data;
+  final List<DatumVehicle>? data;
 
   factory VehiclesModel.fromJson(Map<String, dynamic> json) => VehiclesModel(
         status: json["status"],
         message: json["message"],
         data: json["data"] == null
             ? null
-            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+            : List<DatumVehicle>.from(json["data"].map((x) => DatumVehicle.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,8 +33,8 @@ class VehiclesModel {
       };
 }
 
-class Datum {
-  Datum({
+class DatumVehicle {
+  DatumVehicle({
     required this.vehicleId,
     required this.vehicleOwner,
     required this.vehicleName,
@@ -50,7 +50,7 @@ class Datum {
   final String? vehicleColor;
   final String? vehicleNoPlate;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory DatumVehicle.fromJson(Map<String, dynamic> json) => DatumVehicle(
         vehicleId: json["vehicle_id"],
         vehicleOwner: json["vehicle_owner"],
         vehicleName: json["vehicle_name"],

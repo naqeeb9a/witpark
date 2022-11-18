@@ -4,7 +4,7 @@ import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_text.dart';
 
 class VehicleListDropDown extends StatefulWidget {
-  final List<Datum>? givenList;
+  final List<DatumVehicle>? givenList;
   const VehicleListDropDown({Key? key, required this.givenList})
       : super(key: key);
 
@@ -29,9 +29,9 @@ class _VehicleListDropDownState extends State<VehicleListDropDown> {
           .map((value) => DropdownMenuItem(
                 value: "${value.vehicleName} ${value.vehicleNoPlate}",
                 child: SizedBox(
-                  width: 100.0,
-                  child: CustomText(
-                    text: "${value.vehicleName} ${value.vehicleNoPlate}",
+                  width: 150.0,
+                  child: Text(
+                    "${value.vehicleName} ${value.vehicleNoPlate}",
                     textAlign: TextAlign.center,
                   ),
                 ),

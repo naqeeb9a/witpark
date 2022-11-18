@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
 import 'package:witpark/MVVM/Repo/Bookings/booking_service.dart';
-import '../../Repo/Authentication/signup_service.dart';
+import '../../Repo/status.dart';
 
 class BookingModelView extends ChangeNotifier {
   AllBookingsModel? _allBookingsModel;

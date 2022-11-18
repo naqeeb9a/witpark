@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
 import 'package:witpark/MVVM/Repo/Vehicles/vehicles_service.dart';
-import '../../Repo/Authentication/signup_service.dart';
+import '../../Repo/status.dart';
 
 class NewVehicleModelView extends ChangeNotifier {
   bool _loading = false;

@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:witpark/Provider/user_data_provider.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_button.dart';
 import 'package:witpark/Widgets/custom_text.dart';
@@ -11,7 +10,6 @@ import 'package:witpark/Widgets/vehicle_list.dart';
 import '../../../Widgets/cities_list.dart';
 import '../../ViewModels/Cities/city_view_model.dart';
 import '../../ViewModels/Vehicles/vehicle_view_model.dart';
-// import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 class AddBooking extends StatefulWidget {
   const AddBooking({super.key});
@@ -23,12 +21,6 @@ class AddBooking extends StatefulWidget {
 class _AddBookingState extends State<AddBooking> {
   DateTimeRange? dateTimeRange;
   final dateFormat = DateFormat('yyyy-MM-dd');
-  @override
-  void initState() {
-    context.read<VehicleModelView>().getAllVehicles(
-        context.read<UserDataProvider>().userData!.data!.username!);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

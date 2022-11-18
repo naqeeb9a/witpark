@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:witpark/MVVM/Models/Cities/city_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
 import 'package:witpark/MVVM/Repo/Cities/city_service.dart';
-import '../../Repo/Authentication/signup_service.dart';
+import '../../Repo/status.dart';
 
 class CityModelView extends ChangeNotifier {
   CityModel? _allcitysModel;

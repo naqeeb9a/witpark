@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
@@ -52,7 +53,11 @@ class _VehiclesState extends State<Vehicles> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          KRoutes.push(context, const AddVehicles());
+          if (vehicleModelView.loading == false) {
+            KRoutes.push(context, const AddVehicles());
+          } else {
+            Fluttertoast.showToast(msg: "Wait for the vehicles to load ..");
+          }
         },
       ),
     );
@@ -81,7 +86,7 @@ class _VehiclesState extends State<Vehicles> {
     return ListView.builder(
       itemCount: vehicleModelView.vehiclesModel!.data!.length,
       itemBuilder: (context, index) {
-        Datum vehicle;
+        DatumVehicle vehicle;
         vehicle = vehicleModelView.vehiclesModel!.data![index];
         return VechiclesCards(
           vehicle: vehicle,

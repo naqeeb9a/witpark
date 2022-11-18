@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:witpark/MVVM/Models/Cities/city_model.dart';
-import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
+
+import '../status.dart';
 
 class CitiesService {
   static Future<Object> getAllCities() async {

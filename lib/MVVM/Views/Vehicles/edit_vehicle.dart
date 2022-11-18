@@ -15,7 +15,7 @@ import '../../../Widgets/custom_text.dart';
 import '../../../Widgets/custom_text_field.dart';
 
 class EditVehicle extends StatefulWidget {
-  final Datum? vehicle;
+  final DatumVehicle? vehicle;
   const EditVehicle(this.vehicle, {super.key});
   @override
   State<EditVehicle> createState() => _EditVehicleState();
@@ -130,7 +130,7 @@ class _EditVehicleState extends State<EditVehicle> {
                       buttonColor: primaryColor,
                       text: "Update",
                       function: () async {
-                        Datum vehicle = Datum(
+                        DatumVehicle vehicle = DatumVehicle(
                             vehicleId: widget.vehicle!.vehicleId,
                             vehicleOwner: widget.vehicle!.vehicleOwner,
                             vehicleName: widget.vehicle!.vehicleName,

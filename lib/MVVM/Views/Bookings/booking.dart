@@ -3,11 +3,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
 import 'package:witpark/MVVM/ViewModels/BookingViewModel/booking_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
 import 'package:witpark/MVVM/Views/Bookings/booking_card.dart';
 import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_text.dart';
 
+import '../../../Provider/user_data_provider.dart';
 import 'add_booking.dart';
 
 class Booking extends StatefulWidget {
@@ -30,6 +32,11 @@ class _BookingState extends State<Booking> {
           color: Colors.white,
         ),
         onPressed: () {
+          VehicleModelView vehicleModelView = context.read<VehicleModelView>();
+          if (vehicleModelView.vehiclesModel == null) {
+            vehicleModelView.getAllVehicles(
+                context.read<UserDataProvider>().userData!.data!.username!);
+          }
           KRoutes.push(context, const AddBooking());
         },
       ),

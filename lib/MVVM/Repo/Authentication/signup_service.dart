@@ -1,24 +1,29 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../../Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/Repo/status.dart';
 
 class SignupPageService {
-  static Future<Object> SignUpPage(username,firstname,lastname,email,password,phone,city) async {
+  static Future<Object> signUpPage(
+      String username,
+      String firstname,
+      String lastname,
+      String email,
+      String password,
+      String phone,
+      String city) async {
     try {
       var url = Uri.parse("http://witpark.pythonanywhere.com/API/Signup_API/");
-      var response = await http.post(url,body: {
-        'username':username,
-        'first_name':firstname,
-        'last_name':lastname,
-        'email':email,
-        'password':password,
-        'phone':phone,
-        'city':city
+      var response = await http.post(url, body: {
+        'username': username,
+        'first_name': firstname,
+        'last_name': lastname,
+        'email': email,
+        'password': password,
+        'phone': phone,
+        'city': city
       });
       if (response.statusCode == 200) {
-        return Success(response.statusCode, loginModelFromJson(response.body));
+        return Success(response.statusCode, "success");
       }
       return Failure(response.statusCode, "Invalid Response");
     } on HttpException {
@@ -29,16 +34,4 @@ class SignupPageService {
       return Failure(103, "Unknown Error");
     }
   }
-}
-
-class Failure {
-  int code;
-  Object errorResponse;
-  Failure(this.code, this.errorResponse);
-}
-
-class Success {
-  int? code;
-  late Object response;
-  Success(this.code, this.response);
 }

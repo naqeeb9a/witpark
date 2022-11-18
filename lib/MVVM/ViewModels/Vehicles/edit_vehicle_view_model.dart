@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
 import 'package:witpark/MVVM/Repo/Vehicles/vehicles_service.dart';
-import '../../Repo/Authentication/signup_service.dart';
+import '../../Repo/status.dart';
 
 class EditVehicleModelView extends ChangeNotifier {
   bool _loading = false;
@@ -20,7 +20,7 @@ class EditVehicleModelView extends ChangeNotifier {
     _modelError = modelError;
   }
 
-  Future editVehicle(Datum vehicle) async {
+  Future editVehicle(DatumVehicle vehicle) async {
     setLoading(true);
     var response = await VehiclesService.editVehicle(vehicle);
     if (response is Failure) {

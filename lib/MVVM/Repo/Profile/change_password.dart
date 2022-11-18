@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
-import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
+
+import '../status.dart';
 
 class UpdatePasswordService {
   static Future<Object> updatePassword(
@@ -26,7 +27,6 @@ class UpdatePasswordService {
     } on FormatException {
       return Failure(102, "Invalid format");
     } catch (e) {
-  
       return Failure(103, "Unknown Error");
     }
   }

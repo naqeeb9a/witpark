@@ -3,7 +3,8 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
-import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
+
+import '../status.dart';
 
 class VehiclesService {
   static Future<Object> getAllVehicles(String username) async {
@@ -50,7 +51,7 @@ class VehiclesService {
     }
   }
 
-  static Future<Object> editVehicle(Datum vehicle) async {
+  static Future<Object> editVehicle(DatumVehicle vehicle) async {
     try {
       var url = Uri.parse(
           "https://witpark.pythonanywhere.com/API/Update_Vehicle_API/${vehicle.vehicleId}");

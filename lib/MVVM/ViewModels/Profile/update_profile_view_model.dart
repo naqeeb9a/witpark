@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
-import '../../Repo/Authentication/signup_service.dart';
 import '../../Repo/Profile/edit_profile.dart';
+import '../../Repo/status.dart';
 
 class UpdateProfileModelView extends ChangeNotifier {
   bool _loading = false;

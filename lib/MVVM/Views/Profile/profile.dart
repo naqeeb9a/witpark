@@ -28,161 +28,153 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     LoginModel userData = context.watch<UserDataProvider>().userData!;
     return Scaffold(
-      backgroundColor: primaryColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const SizedBox(height: 10),
-                const CustomText(
-                  text: "Profile",
-                  fontsize: 30,
-                  fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(height: 10),
+              const CustomText(
+                text: "Profile",
+                fontsize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(height: 10),
+              const CircleAvatar(
+                radius: 62,
+                backgroundColor: Colors.black,
+                child: CircleAvatar(
+                  maxRadius: 60,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage("assets/wit2.png"),
                 ),
-                const SizedBox(height: 10),
-                const CircleAvatar(
-                  radius: 62,
-                  backgroundColor: Colors.black,
-                  child: CircleAvatar(
-                    maxRadius: 60,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage("assets/wit2.png"),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          width: 2,
+              ),
+              const SizedBox(height: 10),
+              Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.black,
+                      )),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                CustomText(text: "Email :"),
+                                CustomText(text: "Name :"),
+                                CustomText(text: "phone :"),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(text: "${userData.data!.email}"),
+                                CustomText(text: "${userData.data!.firstName}"),
+                                CustomText(text: "${userData.data!.phone}"),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Divider(
+                          thickness: 2,
                           color: Colors.black,
-                        )),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  CustomText(text: "Email :"),
-                                  CustomText(text: "Name :"),
-                                  CustomText(text: "phone :"),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(text: "${userData.data!.email}"),
-                                  CustomText(
-                                      text: "${userData.data!.firstName}"),
-                                  CustomText(text: "${userData.data!.phone}"),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Divider(
-                            thickness: 2,
-                            color: Colors.black,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          spacer(context, 0.015),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              CustomButton(
-                                  buttonColor: primaryColor,
-                                  text: "Edit profile",
-                                  function: () {
-                                    KRoutes.push(context, const EditProfile());
-                                  }),
-                              CustomButton(
-                                  buttonColor: primaryColor,
-                                  text: "Edit password",
-                                  function: () {
-                                    KRoutes.push(context, const Editpassword());
-                                  })
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
-                    )),
-                const SizedBox(height: 20),
-                CustomButton(
-                    buttonColor: primaryColor,
-                    text: "Vehicles",
-                    invert: true,
-                    function: () {
-                      context
-                          .read<VehicleModelView>()
-                          .getAllVehicles(userData.data!.username!);
-                      KRoutes.push(context, const Vehicles());
-                    }),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                    buttonColor: primaryColor,
-                    text: "FAQ",
-                    invert: true,
-                    function: () {
-                      KRoutes.push(context, const FAQ());
-                    }),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                    buttonColor: primaryColor,
-                    text: "About",
-                    invert: true,
-                    function: () {
-                      KRoutes.push(context, web(context));
-                    }),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomButton(
-                        buttonColor: primaryColor,
-                        text: "Logout",
-                        invert: true,
-                        function: () {
-                          context.read<UserDataProvider>().clearUserData();
-                          KRoutes.push(context, const PageDecider());
-                        }),
-                    CustomButton(
-                        buttonColor: primaryColor,
-                        text: "Delete User",
-                        invert: true,
-                        function: () {
-                          KRoutes.push(context, const DeleteUser());
-                        })
-                  ],
-                )
-              ],
-            ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CustomButton(
+                                buttonColor: primaryColor,
+                                text: "Edit profile",
+                                function: () {
+                                  KRoutes.push(context, const EditProfile());
+                                }),
+                            CustomButton(
+                                buttonColor: primaryColor,
+                                text: "Edit password",
+                                function: () {
+                                  KRoutes.push(context, const Editpassword());
+                                })
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  )),
+              const Spacer(),
+              CustomButton(
+                  buttonColor: primaryColor,
+                  text: "Vehicles",
+                  invert: true,
+                  function: () {
+                    context
+                        .read<VehicleModelView>()
+                        .getAllVehicles(userData.data!.username!);
+                    KRoutes.push(context, const Vehicles());
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomButton(
+                  buttonColor: primaryColor,
+                  text: "FAQ",
+                  invert: true,
+                  function: () {
+                    KRoutes.push(context, const FAQ());
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomButton(
+                  buttonColor: primaryColor,
+                  text: "About",
+                  invert: true,
+                  function: () {
+                    KRoutes.push(context, web(context));
+                  }),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomButton(
+                      buttonColor: primaryColor,
+                      text: "Logout",
+                      function: () {
+                        context.read<UserDataProvider>().clearUserData();
+                        KRoutes.push(context, const PageDecider());
+                      }),
+                  CustomButton(
+                      buttonColor: primaryColor,
+                      text: "Delete User",
+                      function: () {
+                        KRoutes.push(context, const DeleteUser());
+                      })
+                ],
+              ),
+              const Spacer()
+            ],
           ),
         ),
       ),

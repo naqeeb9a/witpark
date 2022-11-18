@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
+import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/new_vehicle_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
 import 'package:witpark/Provider/user_data_provider.dart';
@@ -28,6 +29,8 @@ class _AddVehiclesState extends State<AddVehicles> {
     NewVehicleModelView newVehicleModelView =
         context.watch<NewVehicleModelView>();
     LoginModel? userData = context.read<UserDataProvider>().userData;
+    VehiclesModel vehiclesModel =
+        context.read<VehicleModelView>().vehiclesModel!;
     return Scaffold(
         appBar: AppBar(
           title: const AutoSizeText(
@@ -108,6 +111,27 @@ class _AddVehiclesState extends State<AddVehicles> {
                       buttonColor: primaryColor,
                       text: "Add",
                       function: () async {
+                        List allNumberPlates = vehiclesModel.data!
+                            .map((e) => e.vehicleNoPlate)
+                            .toList();
+                        if (_carColor.text.isEmpty ||
+                            _carModel.text.isEmpty ||
+                            _carName.text.isEmpty ||
+                            _carNumberPlate.text.isEmpty) {
+                          Fluttertoast.showToast(msg: "Fill all fields !!");
+                          return;
+                        }
+                        if (vehiclesModel.data!.length >= 3) {
+                          Fluttertoast.showToast(
+                              msg: "Max Limit of vehicles is three !!");
+                          return;
+                        }
+                        if (allNumberPlates.contains(_carNumberPlate.text)) {
+                          Fluttertoast.showToast(
+                              msg:
+                                  "Same number plate Car cannot be registered !!");
+                          return;
+                        }
                         newVehicleModelView.setModelError(null);
                         await newVehicleModelView
                             .addNewVehicle(
@@ -135,5 +159,14 @@ class _AddVehiclesState extends State<AddVehicles> {
             ]),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _carColor.dispose();
+    _carModel.dispose();
+    _carName.dispose();
+    _carNumberPlate.dispose();
+    super.dispose();
   }
 }

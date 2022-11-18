@@ -5,7 +5,7 @@ import 'package:witpark/MVVM/Views/Vehicles/edit_vehicle.dart';
 import 'package:witpark/Utils/app_routes.dart';
 
 class VechiclesCards extends StatefulWidget {
-  final Datum vehicle;
+  final DatumVehicle vehicle;
   const VechiclesCards({super.key, required this.vehicle});
   @override
   State<VechiclesCards> createState() => _VechiclesCardsState();

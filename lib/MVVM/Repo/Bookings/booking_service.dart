@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
-import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
+
+import '../status.dart';
 
 class BookingService {
   static Future<Object> getAllBookings(String username) async {

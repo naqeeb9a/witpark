@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/ViewModels/Authentication/login_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/Authentication/signup_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/BookingViewModel/booking_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/Cities/city_view_model.dart';
 import 'package:witpark/MVVM/ViewModels/Profile/update_password_view_model.dart';
@@ -43,6 +44,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => UpdatePasswordModelView(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SignupModelView(),
         ),
       ],
       child: MaterialApp(

@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:witpark/MVVM/Repo/Authentication/signup_service.dart';
 
 import '../../Models/Authentication/login_model.dart';
+import '../status.dart';
 
 class UpdateProfileService {
   static Future<Object> updateProfile(LoginModel userData) async {

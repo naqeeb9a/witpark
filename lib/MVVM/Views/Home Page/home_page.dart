@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Views/Bookings/booking.dart';
 import 'package:witpark/MVVM/Views/Home%20Page/home.dart';
-import 'package:witpark/MVVM/Views/NearBy/nearby.dart';
 import 'package:witpark/MVVM/Views/Profile/profile.dart';
 
 import '../../../Provider/user_data_provider.dart';
@@ -18,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selecteditem = 0;
-  var pages = [const Home(), const Booking(), const Nearby(), const Profile()];
+  var pages = [const Home(), const Booking(), const Profile()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +34,6 @@ class _HomePageState extends State<HomePage> {
               Icons.home,
             ),
             Icon(Icons.book_online),
-            Icon(
-              Icons.near_me,
-            ),
             Icon(Icons.person),
           ],
           onTap: (index) {

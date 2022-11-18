@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
+import 'package:witpark/MVVM/Repo/status.dart';
 import '../../Repo/Authentication/login_service.dart';
-import '../../Repo/Authentication/signup_service.dart';
 
 class LoginModelView extends ChangeNotifier {
   LoginModel? _loginModel;
