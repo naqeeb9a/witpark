@@ -1,16 +1,14 @@
 import 'package:flutter/widgets.dart';
-import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
-import 'package:witpark/MVVM/Repo/Vehicles/vehicles_service.dart';
-import '../../Repo/status.dart';
+import 'package:witpark/MVVM/Repo/Authentication/forget_password.dart';
+import 'package:witpark/MVVM/Repo/status.dart';
 
-class EditVehicleModelView extends ChangeNotifier {
+class ForgetPasswordModelView extends ChangeNotifier {
   bool _loading = false;
   ModelError? _modelError;
 
   bool get loading => _loading;
   ModelError? get modelError => _modelError;
-
   setLoading(bool loading) {
     _loading = loading;
     notifyListeners();
@@ -20,9 +18,11 @@ class EditVehicleModelView extends ChangeNotifier {
     _modelError = modelError;
   }
 
-  Future editVehicle(String username, DatumVehicle vehicle) async {
+  Future forgetPassword(String username, String email, String password) async {
     setLoading(true);
-    var response = await VehiclesService.editVehicle(username, vehicle);
+    var response =
+        await ForgetPasswordService.forgetPassword(username, email, password);
+
     if (response is Failure) {
       ModelError modelError = ModelError(response.code, response.errorResponse);
       setModelError(modelError);

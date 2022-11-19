@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/ViewModels/Authentication/signup_view_model.dart';
+import 'package:witpark/Provider/selected_city_provider.dart';
 import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_app_bar.dart';
@@ -168,7 +169,7 @@ class _SignUpState extends State<SignUp> {
                     _email.text,
                     _password.text,
                     _phone.text,
-                    selectedCity,
+                    context.read<SelectedCityProvider>().selectedCity,
                   )
                       .then((value) {
                     if (signupModelView.modelError != null) {

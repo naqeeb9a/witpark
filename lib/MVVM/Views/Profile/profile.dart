@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/Views/Page%20Decider/page_decider.dart';
-import 'package:witpark/MVVM/Views/Profile/delete_user.dart';
 import 'package:witpark/MVVM/Views/Profile/edit_password.dart';
 import 'package:witpark/Provider/user_data_provider.dart';
 import 'package:witpark/Utils/app_routes.dart';
@@ -155,24 +154,13 @@ class _ProfileState extends State<Profile> {
                     KRoutes.push(context, web(context));
                   }),
               const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomButton(
-                      buttonColor: primaryColor,
-                      text: "Logout",
-                      function: () {
-                        context.read<UserDataProvider>().clearUserData();
-                        KRoutes.push(context, const PageDecider());
-                      }),
-                  CustomButton(
-                      buttonColor: primaryColor,
-                      text: "Delete User",
-                      function: () {
-                        KRoutes.push(context, const DeleteUser());
-                      })
-                ],
-              ),
+              CustomButton(
+                  buttonColor: primaryColor,
+                  text: "Logout",
+                  function: () {
+                    context.read<UserDataProvider>().clearUserData();
+                    KRoutes.push(context, const PageDecider());
+                  }),
               const Spacer()
             ],
           ),
@@ -196,7 +184,7 @@ Widget web(BuildContext context) {
           child: const Icon(Icons.arrow_back_ios)),
     ),
     body: const WebView(
-      initialUrl: 'http://witpark.pythonanywhere.com/WitPark/about/',
+      initialUrl: 'https://witpark.pythonanywhere.com/WitPark/about/',
       javascriptMode: JavascriptMode.unrestricted,
     ),
   );

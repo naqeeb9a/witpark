@@ -139,7 +139,7 @@ class _EditVehicleState extends State<EditVehicle> {
                             vehicleNoPlate: widget.vehicle!.vehicleNoPlate);
                         editVehicleModelView.setModelError(null);
                         await editVehicleModelView
-                            .editVehicle(vehicle)
+                            .editVehicle(userData.data!.username!, vehicle)
                             .then((value) {
                           if (editVehicleModelView.modelError != null) {
                             Fluttertoast.showToast(msg: "Edit vehicle error");

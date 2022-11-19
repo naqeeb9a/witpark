@@ -12,6 +12,8 @@ import 'package:witpark/Widgets/custom_button.dart';
 import 'package:witpark/Widgets/custom_text.dart';
 import 'package:witpark/Widgets/custom_text_field.dart';
 
+import '../../../Provider/selected_city_provider.dart';
+
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
   @override
@@ -119,7 +121,9 @@ class _EditProfileState extends State<EditProfile> {
                                   lastName: _lastName.text,
                                   email: userData.data!.email,
                                   phone: userData.data!.phone,
-                                  city: selectedCity));
+                                  city: context
+                                      .read<SelectedCityProvider>()
+                                      .selectedCity));
                           updateProfileModelView.setModelError(null);
                           await updateProfileModelView
                               .getAllupdateProfiles(updatedUserData)

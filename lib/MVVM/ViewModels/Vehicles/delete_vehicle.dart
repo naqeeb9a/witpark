@@ -4,7 +4,7 @@ import 'package:witpark/MVVM/Models/model_error.dart';
 import 'package:witpark/MVVM/Repo/Vehicles/vehicles_service.dart';
 import '../../Repo/status.dart';
 
-class EditVehicleModelView extends ChangeNotifier {
+class DeleteVehicleModelView extends ChangeNotifier {
   bool _loading = false;
   ModelError? _modelError;
 
@@ -20,9 +20,9 @@ class EditVehicleModelView extends ChangeNotifier {
     _modelError = modelError;
   }
 
-  Future editVehicle(String username, DatumVehicle vehicle) async {
+  Future deleteVehicle(String username, DatumVehicle vehicle) async {
     setLoading(true);
-    var response = await VehiclesService.editVehicle(username, vehicle);
+    var response = await VehiclesService.deleteVehicle(username, vehicle);
     if (response is Failure) {
       ModelError modelError = ModelError(response.code, response.errorResponse);
       setModelError(modelError);

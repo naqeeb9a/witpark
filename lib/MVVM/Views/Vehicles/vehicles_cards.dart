@@ -1,7 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/delete_vehicle.dart';
+import 'package:witpark/MVVM/ViewModels/Vehicles/vehicle_view_model.dart';
 import 'package:witpark/MVVM/Views/Vehicles/edit_vehicle.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
 import 'package:witpark/Utils/app_routes.dart';
 
 class VechiclesCards extends StatefulWidget {
@@ -14,10 +21,37 @@ class VechiclesCards extends StatefulWidget {
 class _VechiclesCardsState extends State<VechiclesCards> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        KRoutes.push(context, EditVehicle(widget.vehicle));
-      },
+    LoginModel userData = context.read<UserDataProvider>().userData!;
+    DeleteVehicleModelView deleteVehicleModelView =
+        context.watch<DeleteVehicleModelView>();
+    return Slidable(
+      endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+        SlidableAction(
+          onPressed: (context) {
+            KRoutes.push(context, EditVehicle(widget.vehicle));
+          },
+          icon: Icons.edit,
+          label: 'Edit',
+        ),
+        SlidableAction(
+          onPressed: (context2) async {
+            await deleteVehicleModelView
+                .deleteVehicle(userData.data!.username!, widget.vehicle)
+                .then((value) {
+              if (deleteVehicleModelView.modelError != null) {
+                Fluttertoast.showToast(msg: "Unable to delete Vehicle");
+              } else {
+                context
+                    .read<VehicleModelView>()
+                    .getAllVehicles(userData.data!.username!);
+                Fluttertoast.showToast(msg: "Deleted Successfully !!");
+              }
+            });
+          },
+          icon: Icons.delete,
+          label: 'Delete',
+        ),
+      ]),
       child: Container(
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(10),

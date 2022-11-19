@@ -1,10 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:witpark/MVVM/Models/Vehicles/vehicles_model.dart';
+import 'package:flutter/material.dart';
 import 'package:witpark/MVVM/Models/model_error.dart';
-import 'package:witpark/MVVM/Repo/Vehicles/vehicles_service.dart';
+import 'package:witpark/MVVM/Repo/Bookings/booking_service.dart';
 import '../../Repo/status.dart';
 
-class EditVehicleModelView extends ChangeNotifier {
+class AddBookingModelView extends ChangeNotifier {
   bool _loading = false;
   ModelError? _modelError;
 
@@ -20,9 +19,11 @@ class EditVehicleModelView extends ChangeNotifier {
     _modelError = modelError;
   }
 
-  Future editVehicle(String username, DatumVehicle vehicle) async {
+  Future getAllBookings(String username, String selectedCity, String amount,
+      DateTimeRange dateTimeRange) async {
     setLoading(true);
-    var response = await VehiclesService.editVehicle(username, vehicle);
+    var response = await BookingService.bookParkingSlot(
+        username, selectedCity, amount, dateTimeRange);
     if (response is Failure) {
       ModelError modelError = ModelError(response.code, response.errorResponse);
       setModelError(modelError);

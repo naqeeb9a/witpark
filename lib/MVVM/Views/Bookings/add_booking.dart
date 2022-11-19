@@ -1,10 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/ViewModels/Places/place_view_model.dart';
+import 'package:witpark/MVVM/Views/Payment/payment.dart';
+import 'package:witpark/Provider/selected_city_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
 import 'package:witpark/Utils/utils.dart';
 import 'package:witpark/Widgets/custom_button.dart';
 import 'package:witpark/Widgets/custom_text.dart';
+import 'package:witpark/Widgets/place_list.dart';
 import 'package:witpark/Widgets/vehicle_list.dart';
 
 import '../../../Widgets/cities_list.dart';
@@ -24,6 +30,7 @@ class _AddBookingState extends State<AddBooking> {
 
   @override
   Widget build(BuildContext context) {
+    String selectedCity = context.watch<SelectedCityProvider>().selectedCity;
     return Scaffold(
       appBar: AppBar(
         title: const AutoSizeText(
@@ -68,6 +75,7 @@ class _AddBookingState extends State<AddBooking> {
                       if (cityModelView.modelError != null) {
                         return const CustomText(text: "Error");
                       }
+
                       return ListDropDown(
                           givenList:
                               cityModelView.allcitysModel!.data!.toList());
@@ -76,12 +84,28 @@ class _AddBookingState extends State<AddBooking> {
                 ],
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  AutoSizeText("Parking available"),
-                ],
-              ),
+              if (selectedCity != "Select a City")
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(text: "Available Parkings :"),
+                    Builder(
+                      builder: (context) {
+                        PlaceModelView placeModelView =
+                            context.watch<PlaceModelView>();
+                        if (placeModelView.loading) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (placeModelView.modelError != null) {
+                          return const CustomText(text: "Error");
+                        }
+                        return PlaceListDropDown(
+                            givenList:
+                                placeModelView.allPlacesModel!.data!.toList());
+                      },
+                    )
+                  ],
+                ),
               const SizedBox(
                 height: 10,
               ),
@@ -135,7 +159,21 @@ class _AddBookingState extends State<AddBooking> {
               CustomButton(
                   buttonColor: primaryColor,
                   text: "Proceed to Payment",
-                  function: () {})
+                  function: () {
+                    if (selectedCity == "Select a City") {
+                      Fluttertoast.showToast(msg: "Select a city first");
+                      return;
+                    }
+                    if (dateTimeRange == null) {
+                      Fluttertoast.showToast(msg: "Select a Date range !!");
+                      return;
+                    }
+                    KRoutes.push(
+                        context,
+                        Payment(
+                          dateTimeRange: dateTimeRange!,
+                        ));
+                  })
             ],
           ),
         ),

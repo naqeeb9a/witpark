@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       KRoutes.push(context, const ForgotPassword());
                     },
-                    child: const CustomText(text: "Forgot password?"),
+                    child: const CustomText(text: ""),
                   ),
                 ],
               ),

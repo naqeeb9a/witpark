@@ -1,7 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:witpark/MVVM/Models/Authentication/login_model.dart';
 import 'package:witpark/MVVM/Models/Bookings/all_bookings_model.dart';
+import 'package:witpark/MVVM/ViewModels/BookingViewModel/booking_view_model.dart';
+import 'package:witpark/MVVM/ViewModels/BookingViewModel/cancel_booking.dart';
+import 'package:witpark/Provider/user_data_provider.dart';
+import 'package:witpark/Utils/app_routes.dart';
+import 'package:witpark/Utils/utils.dart';
+import 'package:witpark/Widgets/custom_text.dart';
 
 class BookingDetails extends StatefulWidget {
   final Datum booking;
@@ -14,6 +23,9 @@ class _BookingDetailsState extends State<BookingDetails> {
   final dateFormat = DateFormat('yyyy-MM-dd');
   @override
   Widget build(BuildContext context) {
+    CancelBookingModelView cancelBookingModelView =
+        context.watch<CancelBookingModelView>();
+    LoginModel userData = context.read<UserDataProvider>().userData!;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -43,9 +55,9 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.9,
+            padding: const EdgeInsets.symmetric(vertical: 20),
             decoration: BoxDecoration(
                 color: Colors.amber, borderRadius: BorderRadius.circular(15)),
-            height: MediaQuery.of(context).size.height * 0.5,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -74,12 +86,50 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ],
                 ),
-                const Icon(
-                  Icons.directions,
-                  size: 50,
-                  color: Colors.black,
+                const SizedBox(
+                  height: 20,
                 ),
-                const AutoSizeText('Get Directions')
+                Column(
+                  children: [
+                    cancelBookingModelView.loading
+                        ? Column(
+                            children: const [
+                              CircularProgressIndicator(
+                                color: kWhite,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              )
+                            ],
+                          )
+                        : InkWell(
+                            onTap: () {
+                              cancelBookingModelView.setModelError(null);
+                              cancelBookingModelView
+                                  .cancelBooking(userData.data!.username!,
+                                      widget.booking.bookingId.toString())
+                                  .then((value) {
+                                if (cancelBookingModelView.modelError != null) {
+                                  Fluttertoast.showToast(
+                                      msg: "Unable to cancel booking !");
+                                } else {
+                                  context
+                                      .read<BookingModelView>()
+                                      .getAllBookings(userData.data!.username!);
+                                  KRoutes.pop(context);
+                                  Fluttertoast.showToast(
+                                      msg: "Booking cancelled");
+                                }
+                              });
+                            },
+                            child: const Icon(
+                              Icons.cancel,
+                              size: 50,
+                            ),
+                          ),
+                    const CustomText(text: "Cancel Booking"),
+                  ],
+                )
               ],
             ),
           )
